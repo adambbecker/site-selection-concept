@@ -1,5 +1,5 @@
 // =========================================
-// Search
+// SiteListSearch
 // ----
 // Search functionality in the sites list
 // =========================================
@@ -13,9 +13,7 @@ import React from 'react';
 // ---- Styles ----
 const styles = {
   base: {
-    position: 'relative',
-    // border: 'solid 1px rgba(200, 215, 225, 0.5)',
-    // backgroundColor: '#fff'
+    position: 'relative'
   },
   input: {
     width: '100%',
@@ -36,13 +34,27 @@ const styles = {
 };
 
 // ---- React Class ----
-class Search extends React.Component {
+class SiteListSearch extends React.Component {
 
   render() {
     return (
       <div style={ Object.assign(this.props.style, styles.base) }>
-        <svg style={ styles.icon } xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 19l-5.154-5.154C16.574 12.742 17 11.42 17 10c0-3.866-3.134-7-7-7s-7 3.134-7 7 3.134 7 7 7c1.42 0 2.742-.426 3.846-1.154L19 21l2-2zM5 10c0-2.757 2.243-5 5-5s5 2.243 5 5-2.243 5-5 5-5-2.243-5-5z"/></svg>
-        <input type="text" value={ this.props.value } onChange={ this.props.onChange } onFocus={ this.props.onFocus } onBlur={ this.props.onBlur } style={ styles.input } placeholder="Find Site..." />
+        <svg
+          style={ styles.icon }
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24">
+            <path d="M21 19l-5.154-5.154C16.574 12.742 17 11.42 17 10c0-3.866-3.134-7-7-7s-7 3.134-7 7 3.134 7 7 7c1.42 0 2.742-.426 3.846-1.154L19 21l2-2zM5 10c0-2.757 2.243-5 5-5s5 2.243 5 5-2.243 5-5 5-5-2.243-5-5z"/>
+        </svg>
+        <input
+          ref="input"
+          type="text"
+          value={ this.props.value }
+          onChange={ this.props.onChange }
+          onKeyUp={ this.props.onKeyUp }
+          onFocus={ this.props.onFocus }
+          onBlur={ this.props.onBlur }
+          style={ styles.input }
+          placeholder="Find Site..." />
       </div>
     )
   }
@@ -53,4 +65,4 @@ class Search extends React.Component {
 }
 
 // ==== Module Export ====
-export default Search;
+export default SiteListSearch;

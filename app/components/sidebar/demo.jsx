@@ -1,20 +1,21 @@
 // =========================================
-// Sidebar - Demo
+// Sites-List
 // ----
-// Contains demo links
+// Container for list of sites
 // =========================================
 
 // ---- External Dependencies ----
 require('babel-core/polyfill'); // needed for Object.assign
 import React from 'react';
-import { Spring } from 'react-motion';
+import { Spring, TransitionSpring } from 'react-motion';
 
 // ---- Internal Dependencies ----
+import CurrentSite from './current-site/index.jsx';
+import SiteCard from './site-card.jsx';
+import SiteListSearch from './site-list-search.jsx';
 import SidebarHeader from './header.jsx';
 import SidebarLinkGroup from './link-group.jsx';
 import SidebarLink from './link.jsx';
-// import CurrentSite from './current-site/index.jsx';
-import SitesList from './sites-list/index.jsx';
 
 // ---- Internal Variables ----
 const iconPaths = {
@@ -31,33 +32,143 @@ const iconPaths = {
 
 // ---- Styles ----
 const styles = {
-  links: {
-    position: 'relative',
-    zIndex: 1,
+  base: {
+    position: 'relative'
+  },
+  sites: {
+    base: {
+      position: 'absolute',
+      left: 0,
+      top: 100,
+      width: '100%',
+      zIndex: 2,
+      perspective: 400
+    },
+    list: {
+      border: 'solid 1px rgba(200, 215, 225, 0.5)',
+      borderTop: 'none',
+      backgroundColor: '#fff',
+    },
+    card: {
+      borderTop: 'solid 1px rgba(200, 215, 225, 0.5)',
+    }
   }
 };
 
 // ---- React Class ----
-// class SidebarDemo extends React.Component {
+// class SitesList extends React.Component {
 const SidebarDemo = React.createClass({
-
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     sitesListVisible: false
-  //   };
-  // }
 
   getInitialState() {
     return {
+      sites: {
+        'imf': {
+          title: 'I.M.F.',
+          url: 'nothingsimpossible.wordpress.com',
+          visible: true
+        },
+        'isb': {
+          title: 'I.S.B.',
+          url: 'galaticempirepolice.wordpress.com',
+          visible: false
+        },
+        'mib': {
+          title: 'M.i.B.',
+          url: 'lookrighhere.wordpress.com',
+          visible: true
+        },
+        'shield': {
+          title: 'S.H.I.E.L.D.',
+          url: 'longlifefury.wordpress.com',
+          visible: true
+        },
+        'uncle': {
+          title: 'U.N.C.L.E.',
+          url: 'flemingsolo.wordpress.com',
+          visible: true
+        },
+        'unsc': {
+          title: 'U.N.S.C.',
+          url: 'john117.wordpress.com',
+          visible: true
+        }
+      },
+      selectedKey: 'isb',
+      searchValue: '',
       sitesListVisible: false
-    };
+    }
   },
 
   render() {
+    const { sites, selectedKey } = this.state;
+    let currentSiteList = Object.assign({}, sites);
+
+    Object
+      .keys(currentSiteList)
+      .forEach(key => {
+        const isSelected = (selectedKey === key) ? true : false;
+
+        currentSiteList[key].selected = isSelected;
+      });
+
     return (
-      <div>
-        <SitesList listVisible={ this.state.sitesListVisible } handleSwitchClick={ this._handleSwitchClick } />
+      <div style={ styles.base }>
+        <CurrentSite sites={ currentSiteList } active={ this.state.sitesListVisible } onClick={ this._handleSwitchClick } />
+        <div style={ styles.sites.base }>
+          <Spring defaultValue={ { val: 0 } } endValue={ this.searchGetEndValue() }>
+            { interpolated =>
+              <div key="searchCon" style={ {
+                height: interpolated.height.val,
+                backgroundColor: '#fff',
+                border: 'solid 1px rgba(200, 215, 225, 0.5)',
+                borderBottom: 'none',
+                overflow: 'hidden'
+              } }>
+                <SiteListSearch
+                  ref={ component => {
+                    if (this.state.sitesListVisible && component) {
+                      React.findDOMNode(component.refs.input).focus();
+                    }
+                  } }
+                  value={ this.state.searchValue }
+                  onChange={ this._handleSearchChange }
+                  onKeyUp={ this._handleSearchKeyUp }
+                  style={ {
+                    transform: `translate3d(0, 0, ${ interpolated.z.val }px)`,
+                    transformOrigin: 'top',
+                  } } />
+              </div>
+            }
+          </Spring>
+          <TransitionSpring
+            endValue={ this.sitesGetEndValue() }
+            willLeave={ this.sitesWillLeave }
+            willEnter={ this.sitesWillEnter }>
+            { currentValue =>
+              <ul style={ styles.sites.list }>
+                { Object.keys(currentValue).map(key => {
+                  const config = currentValue[key];
+                  const { data, height, opacity, rotate, z } = config;
+                  const { sites: { card: { borderTop } } } = styles;
+                  const style = {
+                    transform: `translate3d(0, 0, ${ z.val }px)`,
+                    transformOrigin: 'top',
+                    height: height.val,
+                    opacity: opacity.val,
+                    overflow: 'hidden',
+                    cursor: 'pointer'
+                  };
+
+                  return (
+                    <li key={ `list-${ key }` } style={ style } onClick={ this._handleSiteClick(key) }>
+                      <SiteCard title={ data.title } url={ data.url } style={ { borderTop: borderTop } } />
+                    </li>
+                  );
+                }) }
+              </ul>
+            }
+          </TransitionSpring>
+        </div>
         <Spring defaultValue={ { val: 0 } } endValue={ { val: this.state.sitesListVisible ? 0 : 1 } }>
           { interpolated =>
             <div style={ {
@@ -87,12 +198,206 @@ const SidebarDemo = React.createClass({
     );
   },
 
+  // Animation - search
+  // ---------------------
+  searchGetEndValue(prevValue) {
+    const { sitesListVisible } = this.state;
+    let endValue;
+
+    if (sitesListVisible) {
+      endValue = {
+        height: { val: 43 },
+        z: { val: 0 }
+      }
+    } else {
+      endValue = {
+        height: { val: 0 },
+        z: { val: -100 }
+      }
+    }
+
+    return endValue;
+  },
+
+  // Animation - sites list
+  // ----------------------
+  sitesGetEndValue() {
+    const { sites, sitesListVisible, selectedKey } = this.state;
+    let configs = {};
+
+    Object
+      .keys(sites)
+      .filter(key => {
+        return sites[key].visible;
+      })
+      .forEach(key => {
+        let keyConfig;
+
+        if (sitesListVisible) {
+          keyConfig = {
+            height: { val: 67 },
+            opacity: { val: 1 },
+            rotate: { val: 0 },
+            z: { val: 0 },
+            data: sites[key]
+          };
+        } else {
+          keyConfig = {
+            height: { val: 0 },
+            opacity: { val: 0 },
+            rotate: { val: 0 },
+            z: { val: -100 },
+            data: sites[key]
+          };
+        }
+
+        configs[key] = keyConfig;
+      });
+
+    return configs;
+  },
+
+  sitesWillEnter(key) {
+    return {
+      height: { val: 67 },
+      opacity: { val: 1 },
+      rotate: { val: 0 },
+      z: { val: 0 },
+      data: this.state.sites[key]
+    };
+  },
+
+  sitesWillLeave(key, valueThatJustLeft) {
+    return {
+      height: { val: 0 },
+      opacity: { val: 0 },
+      rotate: { val: 90 },
+      z: { val: -100 },
+      data: valueThatJustLeft.data,
+    };
+  },
+
   // Handlers
   // ------------
   _handleSwitchClick() {
+    const { sites, selectedKey, sitesListVisible, searchValue } = this.state;
+    let filteredSites = Object.assign({}, sites);
+
+    if (sitesListVisible && searchValue !== '') {
+      Object
+        .keys(filteredSites)
+        .forEach(key => {
+          let isVisible = true;
+
+          if (key === selectedKey) {
+            isVisible = false;
+          }
+
+          filteredSites[key].visible = isVisible;
+        });
+    }
+
     this.setState({
-      sitesListVisible: ! this.state.sitesListVisible
+      sites: filteredSites,
+      sitesListVisible: ! sitesListVisible,
+      searchValue: ''
     });
+  },
+
+  _handleSearchChange(event) {
+    const { selectedKey } = this.state;
+    const searchValue = event.target.value;
+    let filteredSites = Object.assign({}, this.state.sites);
+
+    Object
+      .keys(filteredSites)
+      .forEach(key => {
+        const { title, url } = filteredSites[key];
+        const strippedTitile = title.replace(/\./g, '');
+        const lowerStrippedTitle = strippedTitile.toLowerCase();
+        const searchableString = `${ title }${ strippedTitile }${ lowerStrippedTitle }${ url }`;
+        let isVisible = true;
+
+        if (searchableString.indexOf(searchValue) === -1 || key === selectedKey) {
+          isVisible = false;
+        }
+
+        filteredSites[key].visible = isVisible;
+      });
+
+    this.setState({
+      sites: filteredSites,
+      searchValue: searchValue
+    });
+  },
+
+  _handleSearchKeyUp(event) {
+    const { sites, selectedKey, searchValue } = this.state;
+    const { keyCode } = event;
+
+    if (keyCode === 13) { // enter
+      let filteredSiteKeys = [];
+
+      Object
+        .keys(sites)
+        .filter(key => {
+          return sites[key].visible;
+        })
+        .forEach(key => {
+          filteredSiteKeys.push(key);
+        });
+
+      if (filteredSiteKeys.length === 1) {
+        this._handleSiteClick(filteredSiteKeys[0])();
+      } else if (filteredSiteKeys.length === 0) {
+        this._handleSwitchClick();
+      }
+    } else if (keyCode === 27) { // esc
+      let filteredSites = Object.assign({}, this.state.sites);
+
+      Object
+        .keys(filteredSites)
+        .forEach(key => {
+          let isVisible = true;
+
+          if (key === selectedKey) {
+            isVisible = false;
+          }
+
+          filteredSites[key].visible = isVisible;
+        });
+
+      this.setState({
+        sites: filteredSites,
+        searchValue: '',
+        sitesListVisible: (searchValue === '') ? false : this.state.sitesListVisible
+      });
+    }
+  },
+
+  _handleSiteClick(clickedKey) {
+    return () => {
+      let filteredSites = Object.assign({}, this.state.sites);
+
+      Object
+        .keys(filteredSites)
+        .forEach(key => {
+          let isVisible = true;
+
+          if (key === clickedKey) {
+            isVisible = false;
+          }
+
+          filteredSites[key].visible = isVisible;
+        });
+
+      this.setState({
+        sites: filteredSites,
+        selectedKey: clickedKey,
+        sitesListVisible: false,
+        searchValue: ''
+      });
+    };
   }
 
 });
