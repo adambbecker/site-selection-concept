@@ -13,7 +13,8 @@
     "abb-reset-css": "git://github.com/adambbecker/abb-reset-css.git",
     "radium": "^0.13.2",
     "react": "^0.13.3",
-    "react-motion": "^0.2.2"
+    "react-motion": "^0.2.2",
+    "react-onclickoutside": "^0.3.0"
   },
   "devDependencies": {
     "babel-core": "^5.6.15",

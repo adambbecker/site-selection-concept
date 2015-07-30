@@ -59,37 +59,41 @@ const styles = {
 // class SitesList extends React.Component {
 const SidebarDemo = React.createClass({
 
+  mixins: [
+    require('react-onclickoutside')
+  ],
+
   getInitialState() {
     return {
       sites: {
         'imf': {
           title: 'I.M.F.',
-          url: 'nothingsimpossible.wordpress.com',
+          url: 'nothingsimpossible.com',
           visible: true
         },
         'isb': {
           title: 'I.S.B.',
-          url: 'galaticempirepolice.wordpress.com',
+          url: 'galaticempirepolice.com',
           visible: false
         },
         'mib': {
           title: 'M.i.B.',
-          url: 'lookrighhere.wordpress.com',
+          url: 'lookrighhere.com',
           visible: true
         },
         'shield': {
           title: 'S.H.I.E.L.D.',
-          url: 'longlifefury.wordpress.com',
+          url: 'longlifefury.com',
           visible: true
         },
         'uncle': {
           title: 'U.N.C.L.E.',
-          url: 'flemingsolo.wordpress.com',
+          url: 'flemingsolo.com',
           visible: true
         },
         'unsc': {
           title: 'U.N.S.C.',
-          url: 'john117.wordpress.com',
+          url: 'john117.com',
           visible: true
         }
       },
@@ -176,7 +180,6 @@ const SidebarDemo = React.createClass({
             } }>
               <SidebarLinkGroup>
                 <SidebarLink iconPath={ iconPaths.globe } external={ true }>View Site</SidebarLink>
-                <SidebarLink iconPath={ iconPaths.wpadmin } external={ true }>WP Admin</SidebarLink>
                 <SidebarLink iconPath={ iconPaths.stats }>Stats</SidebarLink>
               </SidebarLinkGroup>
               <SidebarHeader>Publish</SidebarHeader>
@@ -277,29 +280,43 @@ const SidebarDemo = React.createClass({
     };
   },
 
-  // Handlers
+  // Generators
   // ------------
-  _handleSwitchClick() {
-    const { sites, selectedKey, sitesListVisible, searchValue } = this.state;
+  _genSelectedSiteList() {
+    // generates full site list based on current `selectedKey`
+    // only selected site not visible
+    const { sites, selectedKey } = this.state;
     let filteredSites = Object.assign({}, sites);
 
-    if (sitesListVisible && searchValue !== '') {
-      Object
-        .keys(filteredSites)
-        .forEach(key => {
-          let isVisible = true;
+    Object
+      .keys(filteredSites)
+      .forEach(key => {
+        let isVisible = true;
 
-          if (key === selectedKey) {
-            isVisible = false;
-          }
+        if (key === selectedKey) {
+          isVisible = false;
+        }
 
-          filteredSites[key].visible = isVisible;
-        });
-    }
+        filteredSites[key].visible = isVisible;
+      });
 
+    return filteredSites;
+  },
+
+  // Handlers
+  // ------------
+  handleClickOutside: function(evt) {
     this.setState({
-      sites: filteredSites,
-      sitesListVisible: ! sitesListVisible,
+      sites: this._genSelectedSiteList(),
+      sitesListVisible: false,
+      searchValue: ''
+    });
+  },
+
+  _handleSwitchClick() {
+    this.setState({
+      sites: this._genSelectedSiteList(),
+      sitesListVisible: ! this.state.sitesListVisible,
       searchValue: ''
     });
   },
@@ -332,7 +349,7 @@ const SidebarDemo = React.createClass({
   },
 
   _handleSearchKeyUp(event) {
-    const { sites, selectedKey, searchValue } = this.state;
+    const { sites, sitesListVisible, selectedKey, searchValue } = this.state;
     const { keyCode } = event;
 
     if (keyCode === 13) { // enter
@@ -353,24 +370,10 @@ const SidebarDemo = React.createClass({
         this._handleSwitchClick();
       }
     } else if (keyCode === 27) { // esc
-      let filteredSites = Object.assign({}, this.state.sites);
-
-      Object
-        .keys(filteredSites)
-        .forEach(key => {
-          let isVisible = true;
-
-          if (key === selectedKey) {
-            isVisible = false;
-          }
-
-          filteredSites[key].visible = isVisible;
-        });
-
       this.setState({
-        sites: filteredSites,
-        searchValue: '',
-        sitesListVisible: (searchValue === '') ? false : this.state.sitesListVisible
+        sites: this._genSelectedSiteList(),
+        sitesListVisible: (searchValue === '') ? false : sitesListVisible,
+        searchValue: ''
       });
     }
   },
@@ -393,9 +396,9 @@ const SidebarDemo = React.createClass({
 
       this.setState({
         sites: filteredSites,
-        selectedKey: clickedKey,
         sitesListVisible: false,
-        searchValue: ''
+        searchValue: '',
+        selectedKey: clickedKey
       });
     };
   }
