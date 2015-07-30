@@ -28,6 +28,9 @@ module.exports = {
     }, {
       test: /\.css$/,
       loader: 'style-loader!css-loader'
+    }, {
+      test: /\.(png|jpg|svg)$/,
+      loader: 'url-loader?limit=8192'
     }]
   }
 };

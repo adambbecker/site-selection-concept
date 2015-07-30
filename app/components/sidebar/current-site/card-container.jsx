@@ -52,7 +52,7 @@ const CurrentCardContainer = React.createClass({
 
                 return (
                   <div key={ `current-${ key }` } style={ Object.assign(style, styles.card) }>
-                    <SiteCard title={ data.title } url={ data.url } />
+                    <SiteCard title={ data.title } url={ data.url } blavatar={ data.blavatar } />
                   </div>
                 );
               }) }

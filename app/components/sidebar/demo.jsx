@@ -69,31 +69,37 @@ const SidebarDemo = React.createClass({
         'imf': {
           title: 'I.M.F.',
           url: 'nothingsimpossible.com',
+          blavatar: require('./blavatars/imf.png'),
           visible: true
         },
         'isb': {
           title: 'I.S.B.',
           url: 'galaticempirepolice.com',
+          blavatar: require('./blavatars/isb.png'),
           visible: false
         },
         'mib': {
           title: 'M.i.B.',
           url: 'lookrighhere.com',
+          blavatar: require('./blavatars/mib.png'),
           visible: true
         },
         'shield': {
           title: 'S.H.I.E.L.D.',
           url: 'longlifefury.com',
+          blavatar: require('./blavatars/shield.png'),
           visible: true
         },
         'uncle': {
           title: 'U.N.C.L.E.',
           url: 'flemingsolo.com',
+          blavatar: require('./blavatars/uncle.png'),
           visible: true
         },
         'unsc': {
           title: 'U.N.S.C.',
           url: 'john117.com',
+          blavatar: require('./blavatars/unsc.png'),
           visible: true
         }
       },
@@ -165,7 +171,7 @@ const SidebarDemo = React.createClass({
 
                   return (
                     <li key={ `list-${ key }` } style={ style } onClick={ this._handleSiteClick(key) }>
-                      <SiteCard title={ data.title } url={ data.url } style={ { borderTop: borderTop } } />
+                      <SiteCard title={ data.title } url={ data.url } blavatar={ data.blavatar } style={ { borderTop: borderTop } } />
                     </li>
                   );
                 }) }

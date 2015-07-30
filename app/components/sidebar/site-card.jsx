@@ -45,12 +45,14 @@ const styles = {
 class SiteCard extends React.Component {
 
   render() {
+    const blavatarURL = (this.props.blavatar) ? this.props.blavatar : 'https://cldup.com/nOspbsQlYa.png';
+
     return (
       <div style={ [
         styles.base,
         this.props.style
       ] }>
-        <img src="https://cldup.com/nOspbsQlYa.png" style={ styles.icon } />
+        <img src={ blavatarURL } style={ styles.icon } />
         <div style={ styles.text }>
           <div style={ styles.title }>{ this.props.title }</div>
           <div style={ styles.url }>{ this.props.url }</div>
