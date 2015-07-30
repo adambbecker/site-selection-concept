@@ -66,6 +66,12 @@ const SidebarDemo = React.createClass({
   getInitialState() {
     return {
       sites: {
+        'all': {
+          title: 'All My Sites',
+          url: 'Manage all my sites',
+          blavatar: require('./blavatars/all.png'),
+          visible: false
+        },
         'imf': {
           title: 'I.M.F.',
           url: 'nothingsimpossible.com',
@@ -76,7 +82,7 @@ const SidebarDemo = React.createClass({
           title: 'I.S.B.',
           url: 'galaticempirepolice.com',
           blavatar: require('./blavatars/isb.png'),
-          visible: false
+          visible: true
         },
         'mib': {
           title: 'M.i.B.',
@@ -103,7 +109,7 @@ const SidebarDemo = React.createClass({
           visible: true
         }
       },
-      selectedKey: 'isb',
+      selectedKey: 'all',
       searchValue: '',
       sitesListVisible: false
     }
@@ -184,22 +190,41 @@ const SidebarDemo = React.createClass({
             <div style={ {
               opacity: interpolated.val
             } }>
-              <SidebarLinkGroup>
-                <SidebarLink iconPath={ iconPaths.globe } external={ true }>View Site</SidebarLink>
-                <SidebarLink iconPath={ iconPaths.stats }>Stats</SidebarLink>
-              </SidebarLinkGroup>
-              <SidebarHeader>Publish</SidebarHeader>
-              <SidebarLinkGroup>
-                <SidebarLink iconPath={ iconPaths.posts } button={ true }>Blog Posts</SidebarLink>
-                <SidebarLink iconPath={ iconPaths.pages } button={ true }>Pages</SidebarLink>
-                <SidebarLink iconPath={ iconPaths.media } external={ true }>Media</SidebarLink>
-              </SidebarLinkGroup>
-              <SidebarHeader>Look and Feel</SidebarHeader>
-              <SidebarLinkGroup>
-                <SidebarLink iconPath={ iconPaths.themes } external={ true }>Themes</SidebarLink>
-                <SidebarLink iconPath={ iconPaths.customize }>Customize</SidebarLink>
-                <SidebarLink iconPath={ iconPaths.menus }>Menus</SidebarLink>
-              </SidebarLinkGroup>
+              { (selectedKey === 'all') ?
+                <div>
+                  <SidebarLinkGroup>
+                    <SidebarLink iconPath={ iconPaths.stats }>Stats</SidebarLink>
+                  </SidebarLinkGroup>
+                  <SidebarHeader>Publish</SidebarHeader>
+                  <SidebarLinkGroup>
+                    <SidebarLink iconPath={ iconPaths.posts } button={ true }>Blog Posts</SidebarLink>
+                    <SidebarLink iconPath={ iconPaths.pages } button={ true }>Pages</SidebarLink>
+                  </SidebarLinkGroup>
+                  <SidebarHeader>Look and Feel</SidebarHeader>
+                  <SidebarLinkGroup>
+                    <SidebarLink iconPath={ iconPaths.themes } external={ true }>Themes</SidebarLink>
+                  </SidebarLinkGroup>
+                </div>
+              :
+                <div>
+                  <SidebarLinkGroup>
+                    <SidebarLink iconPath={ iconPaths.globe } external={ true }>View Site</SidebarLink>
+                    <SidebarLink iconPath={ iconPaths.stats }>Stats</SidebarLink>
+                  </SidebarLinkGroup>
+                  <SidebarHeader>Publish</SidebarHeader>
+                  <SidebarLinkGroup>
+                    <SidebarLink iconPath={ iconPaths.posts } button={ true }>Blog Posts</SidebarLink>
+                    <SidebarLink iconPath={ iconPaths.pages } button={ true }>Pages</SidebarLink>
+                    <SidebarLink iconPath={ iconPaths.media } external={ true }>Media</SidebarLink>
+                  </SidebarLinkGroup>
+                  <SidebarHeader>Look and Feel</SidebarHeader>
+                  <SidebarLinkGroup>
+                    <SidebarLink iconPath={ iconPaths.themes } external={ true }>Themes</SidebarLink>
+                    <SidebarLink iconPath={ iconPaths.customize }>Customize</SidebarLink>
+                    <SidebarLink iconPath={ iconPaths.menus }>Menus</SidebarLink>
+                  </SidebarLinkGroup>
+                </div>
+              }
             </div>
           }
         </Spring>

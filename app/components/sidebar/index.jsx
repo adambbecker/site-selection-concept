@@ -14,7 +14,8 @@ import SidebarDemo from './demo.jsx';
 const styles = {
   position: 'relative',
   width: '100%',
-  maxWidth: 266
+  maxWidth: 266,
+  height: 564
 };
 
 // ---- React Class ----
