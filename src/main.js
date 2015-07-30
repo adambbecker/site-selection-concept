@@ -8,9 +8,9 @@
 import React from 'react';
 
 // ---- Internal Dependencies ----
-import MasterBar from './master-bar.jsx';
-import DemoArea from './demo-area.jsx';
-import Sidebar from './sidebar/index.jsx';
+import MasterBar from './components/master-bar.jsx';
+import DemoArea from './components/demo-area.jsx';
+import Sidebar from './components/sidebar/index.jsx';
 
 // ---- Styles ----
 import 'abb-reset-css';
