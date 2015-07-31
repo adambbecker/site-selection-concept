@@ -34,14 +34,13 @@ module.exports = function (grunt) {
 					new webpack.DefinePlugin({
 						'process.env': {
 							// This has effect on the react lib size
-							'NODE_ENV': JSON.stringify('development')
+							'NODE_ENV': JSON.stringify('production')
 						}
 					}),
-          // new webpack.optimize.DedupePlugin(),
-          // new webpack.optimize.UglifyJsPlugin(),
-          // new webpack.optimize.OccurenceOrderPlugin(),
-          // new webpack.optimize.AggressiveMergingPlugin()
-          new webpack.NoErrorsPlugin()
+          new webpack.optimize.DedupePlugin(),
+          new webpack.optimize.UglifyJsPlugin(),
+          new webpack.optimize.OccurenceOrderPlugin(),
+          new webpack.optimize.AggressiveMergingPlugin()
 				],
         module: {
           loaders: [{
