@@ -131,7 +131,7 @@ const SidebarDemo = React.createClass({
       <div style={ styles.base }>
         <CurrentSite sites={ currentSiteList } active={ this.state.sitesListVisible } onClick={ this._handleSwitchClick } />
         <div style={ styles.sites.base }>
-          <Spring defaultValue={ { val: 0 } } endValue={ this.searchGetEndValue() }>
+          <Spring defaultValue={ { height: { val: 0 }, z: { val: -100 } } } endValue={ this.searchGetEndValue() }>
             { interpolated =>
               <div key="searchCon" style={ {
                 height: interpolated.height.val,
