@@ -236,18 +236,18 @@ const SidebarDemo = React.createClass({
   // ---------------------
   searchGetEndValue(prevValue) {
     const { sitesListVisible } = this.state;
-    let endValue;
+    let endValue = {};
 
     if (sitesListVisible) {
       endValue = {
         height: { val: 43 },
         z: { val: 0 }
-      }
+      };
     } else {
       endValue = {
         height: { val: 0 },
         z: { val: -100 }
-      }
+      };
     }
 
     return endValue;
