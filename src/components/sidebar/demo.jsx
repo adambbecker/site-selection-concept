@@ -56,7 +56,6 @@ const styles = {
 };
 
 // ---- React Class ----
-// class SitesList extends React.Component {
 const SidebarDemo = React.createClass({
 
   mixins: [
@@ -259,15 +258,41 @@ const SidebarDemo = React.createClass({
     const { sites, sitesListVisible, selectedKey } = this.state;
     let configs = {};
 
+    // Object
+    //   .keys(sites)
+    //   .filter(key => {
+    //     return sites[key].visible;
+    //   })
+    //   .forEach(key => {
+    //     let keyConfig;
+    //
+    //     if (sitesListVisible && selectedKey !== key) {
+    //       keyConfig = {
+    //         height: { val: 67 },
+    //         opacity: { val: 1 },
+    //         rotate: { val: 0 },
+    //         z: { val: 0 },
+    //         data: sites[key]
+    //       };
+    //     } else {
+    //       keyConfig = {
+    //         height: { val: 0 },
+    //         opacity: { val: 0 },
+    //         rotate: { val: 0 },
+    //         z: { val: -100 },
+    //         data: sites[key]
+    //       };
+    //     }
+    //
+    //     configs[key] = keyConfig;
+    //   });
+
     Object
       .keys(sites)
-      .filter(key => {
-        return sites[key].visible;
-      })
       .forEach(key => {
         let keyConfig;
 
-        if (sitesListVisible) {
+        if (sitesListVisible && selectedKey !== key && sites[key].visible) {
           keyConfig = {
             height: { val: 67 },
             opacity: { val: 1 },

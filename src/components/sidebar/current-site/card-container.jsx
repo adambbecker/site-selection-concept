@@ -30,7 +30,6 @@ const styles = {
 };
 
 // ---- React Class ----
-// class CurrentCardContainer extends React.Component {
 const CurrentCardContainer = React.createClass({
 
   render() {

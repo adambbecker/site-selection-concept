@@ -8,9 +8,6 @@
 import React from 'react';
 import Radium from 'radium';
 
-// ---- Internal Dependencies ----
-
-
 // ---- Styles ----
 import { projectStyles } from '../../../project-vars.js';
 const styles = {

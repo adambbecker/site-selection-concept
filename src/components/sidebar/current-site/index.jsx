@@ -10,7 +10,6 @@ import Radium from 'radium';
 
 // ---- Internal Dependencies ----
 import CurrentCardContainer from './card-container.jsx';
-// import SiteCard from '../site-card.jsx';
 import SwitchSite from './switch-site.jsx';
 
 // ---- Styles ----
@@ -32,21 +31,6 @@ const styles = {
 // ---- React Class ----
 class CurrentSite extends React.Component {
 
-  // render() {
-  //   return (
-  //     <div
-  //       ref="base"
-  //       style={ [
-  //         styles,
-  //         this.props.active && styles[':hover']
-  //       ] }
-  //       onClick={ this.props.onClick }>
-  //       <SiteCard title={ this.props.title } url={ this.props.url } />
-  //       <SwitchSite hovering={ Radium.getState(this.state, 'base', ':hover') } active={ this.props.active } />
-  //     </div>
-  //   )
-  // }
-
   render() {
     return (
       <div
@@ -65,12 +49,6 @@ class CurrentSite extends React.Component {
   // Header
   // ------------
 
-}
-
-CurrentSite.defaultProps = {
-  title: 'I.S.B.',
-  url: 'galaticempirepolice.wordpress.com',
-  // active: true
 }
 
 // ==== Module Export ====
