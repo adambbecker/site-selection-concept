@@ -6,15 +6,19 @@
 
 // ---- External Dependencies ----
 import React from 'react';
+import uuid from 'node-uuid';
+import ga from './ga.js';
 
 // ---- Internal Dependencies ----
 import MasterBar from './components/master-bar.jsx';
 import DemoArea from './components/demo-area.jsx';
 import Sidebar from './components/sidebar/index.jsx';
 
+// ---- Internal Variables ----
+const { GA_TRACKING_ID, ADAM_UUID } = process.env;
+
 // ---- Styles ----
 import 'abb-reset-css';
-
 const styles = {
   display: 'flex',
   justifyContent: 'space-between',
@@ -27,6 +31,17 @@ const styles = {
 };
 
 class Main extends React.Component {
+
+  componentDidMount() {
+    const visitorUUID = (typeof localStorage.visitorUUID !== 'undefined') ? localStorage.visitorUUID : uuid.v4();
+
+    localStorage.visitorUUID = visitorUUID;
+
+    if (typeof GA_TRACKING_ID !== 'undefined' && visitorUUID !== ADAM_UUID) {
+      ga('create', GA_TRACKING_ID, { 'userId': visitorUUID });
+      ga('send', 'pageview');
+    }
+  }
 
   render() {
     return (

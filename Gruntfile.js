@@ -34,7 +34,9 @@ module.exports = function (grunt) {
 					new webpack.DefinePlugin({
 						'process.env': {
 							// This has effect on the react lib size
-							'NODE_ENV': JSON.stringify('production')
+							'NODE_ENV': JSON.stringify('production'),
+              'GA_TRACKING_ID': JSON.stringify('UA-65859875-1'),
+              'ADAM_UUID': JSON.stringify('8c2381ca-8a7d-4677-a731-6ad0509469aa')
 						}
 					}),
           new webpack.optimize.DedupePlugin(),
@@ -69,7 +71,6 @@ module.exports = function (grunt) {
           ],
 					devtool: 'eval',
 					debug: true,
-          // hot: true,
           historyApiFallback: true,
           output: {
             path: path.join(__dirname, pkgConfig.dist),
@@ -78,6 +79,12 @@ module.exports = function (grunt) {
             chunkFilename: '[chunkhash].js'
           },
           plugins: [
+            new webpack.DefinePlugin({
+  						'process.env': {
+  							// This has effect on the react lib size
+  							'NODE_ENV': JSON.stringify('development')
+  						}
+  					}),
             new webpack.HotModuleReplacementPlugin(),
             new webpack.NoErrorsPlugin()
           ],
