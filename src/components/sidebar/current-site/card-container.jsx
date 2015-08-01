@@ -65,7 +65,7 @@ const CurrentCardContainer = React.createClass({
   // Animation - sites list
   // ----------------------
   getEndValue() {
-    const { sites } = this.props;
+    const { sites, springConfig } = this.props;
     let configs = {};
 
     Object
@@ -75,8 +75,8 @@ const CurrentCardContainer = React.createClass({
       })
       .forEach(key => {
         const keyConfig = {
-          translateY: { val: 0 },
-          opacity: { val: 1 },
+          translateY: { val: 0, config: springConfig },
+          opacity: { val: 1, config: springConfig },
           data: sites[key]
         };
 
@@ -87,21 +87,25 @@ const CurrentCardContainer = React.createClass({
   },
 
   willEnter(key) {
+    const { springConfig } = this.props;
+
     return {
-      translateY: { val: 100 },
-      opacity: { val: 0 },
+      translateY: { val: 100, config: springConfig },
+      opacity: { val: 0, config: springConfig },
       data: this.props.sites[key]
     };
   },
 
   willLeave(key, value, endValue, currentValue, currentSpeed) {
+    const { springConfig } = this.props;
+
     if (currentValue[key].opacity.val === 0 && currentSpeed[key].opacity.val === 0) {
       return null; // kill component when opacity reaches 0
     }
 
     return {
-      translateY: { val: -100 },
-      opacity: { val: 0 },
+      translateY: { val: -100, config: springConfig },
+      opacity: { val: 0, config: springConfig },
       data: currentValue[key].data
     };
   },

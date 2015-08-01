@@ -32,16 +32,18 @@ const styles = {
 class CurrentSite extends React.Component {
 
   render() {
+    const { sites, active, onClick, springConfig } = this.props;
+
     return (
       <div
         ref="base"
         style={ [
           styles,
-          this.props.active && styles[':hover']
+          active && styles[':hover']
         ] }
-        onClick={ this.props.onClick }>
-        <CurrentCardContainer sites={ this.props.sites } />
-        <SwitchSite hovering={ Radium.getState(this.state, 'base', ':hover') } active={ this.props.active } />
+        onClick={ onClick }>
+        <CurrentCardContainer sites={ sites } springConfig={ springConfig } />
+        <SwitchSite hovering={ Radium.getState(this.state, 'base', ':hover') } active={ active } />
       </div>
     )
   }

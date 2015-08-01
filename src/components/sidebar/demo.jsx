@@ -29,6 +29,10 @@ const iconPaths = {
   wpadmin: 'M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zM3.5 12c0-1.232.264-2.402.736-3.46L8.29 19.65C5.456 18.272 3.5 15.365 3.5 12zm8.5 8.5c-.834 0-1.64-.12-2.4-.345l2.55-7.41 2.613 7.157c.017.042.038.08.06.117-.884.31-1.833.48-2.823.48zm1.172-12.485c.512-.027.973-.08.973-.08.458-.055.404-.728-.054-.702 0 0-1.376.108-2.265.108-.835 0-2.24-.107-2.24-.107-.458-.026-.51.674-.053.7 0 0 .434.055.892.082l1.324 3.63-1.86 5.578-3.096-9.208c.512-.027.973-.08.973-.08.458-.055.403-.728-.055-.702 0 0-1.376.108-2.265.108-.16 0-.347-.003-.547-.01C6.418 5.025 9.03 3.5 12 3.5c2.213 0 4.228.846 5.74 2.232-.037-.002-.072-.007-.11-.007-.835 0-1.427.727-1.427 1.51 0 .7.404 1.292.835 1.993.323.566.7 1.293.7 2.344 0 .727-.28 1.572-.646 2.748l-.848 2.833-3.072-9.138zm3.1 11.332l2.597-7.506c.484-1.212.645-2.18.645-3.044 0-.313-.02-.603-.057-.874.664 1.21 1.042 2.6 1.042 4.078 0 3.136-1.7 5.874-4.227 7.347z',
   stats: 'M21 21H3v-2h18v2zM8 10H4v7h4v-7zm6-7h-4v14h4V3zm6 3h-4v11h4V6z'
 };
+const springConfigs = {
+  default: [170, 26],
+  slow: [80, 62]
+};
 
 // ---- Styles ----
 const styles = {
@@ -110,12 +114,13 @@ const SidebarDemo = React.createClass({
       },
       selectedKey: 'all',
       searchValue: '',
-      sitesListVisible: false
+      sitesListVisible: false,
+      springConfig: springConfigs.default
     }
   },
 
   render() {
-    const { sites, selectedKey } = this.state;
+    const { sites, selectedKey, sitesListVisible, springConfig } = this.state;
     let currentSiteList = Object.assign({}, sites);
 
     Object
@@ -128,9 +133,18 @@ const SidebarDemo = React.createClass({
 
     return (
       <div style={ styles.base }>
-        <CurrentSite sites={ currentSiteList } active={ this.state.sitesListVisible } onClick={ this._handleSwitchClick } />
+        <CurrentSite
+          sites={ currentSiteList }
+          active={ sitesListVisible }
+          onClick={ this._handleSwitchClick }
+          springConfig={ springConfig } />
         <div style={ styles.sites.base }>
-          <Spring defaultValue={ { height: { val: 0 }, z: { val: -100 } } } endValue={ this.searchGetEndValue() }>
+          <Spring
+            defaultValue={ {
+              height: { val: 0, config: springConfig },
+              z: { val: -100, config: springConfig }
+            } }
+            endValue={ this.searchGetEndValue() }>
             { interpolated =>
               <div key="searchCon" style={ {
                 height: interpolated.height.val,
@@ -184,7 +198,12 @@ const SidebarDemo = React.createClass({
             }
           </TransitionSpring>
         </div>
-        <Spring defaultValue={ { val: 0 } } endValue={ { val: this.state.sitesListVisible ? 0 : 1 } }>
+        <Spring
+          defaultValue={ { val: 0 } }
+          endValue={ {
+            val: this.state.sitesListVisible ? 0 : 1,
+            config: springConfig
+          } }>
           { interpolated =>
             <div style={ {
               opacity: interpolated.val
@@ -234,19 +253,15 @@ const SidebarDemo = React.createClass({
   // Animation - search
   // ---------------------
   searchGetEndValue(prevValue) {
-    const { sitesListVisible } = this.state;
-    let endValue = {};
+    const { sitesListVisible, springConfig } = this.state;
+    let endValue = {
+      height: { val: 0, config: springConfig },
+      z: { val: -100, config: springConfig }
+    };
 
     if (sitesListVisible) {
-      endValue = {
-        height: { val: 43 },
-        z: { val: 0 }
-      };
-    } else {
-      endValue = {
-        height: { val: 0 },
-        z: { val: -100 }
-      };
+      endValue.height.val = 43;
+      endValue.z.val = 0;
     }
 
     return endValue;
@@ -255,59 +270,23 @@ const SidebarDemo = React.createClass({
   // Animation - sites list
   // ----------------------
   sitesGetEndValue() {
-    const { sites, sitesListVisible, selectedKey } = this.state;
+    const { sites, sitesListVisible, selectedKey, springConfig } = this.state;
     let configs = {};
-
-    // Object
-    //   .keys(sites)
-    //   .filter(key => {
-    //     return sites[key].visible;
-    //   })
-    //   .forEach(key => {
-    //     let keyConfig;
-    //
-    //     if (sitesListVisible && selectedKey !== key) {
-    //       keyConfig = {
-    //         height: { val: 67 },
-    //         opacity: { val: 1 },
-    //         rotate: { val: 0 },
-    //         z: { val: 0 },
-    //         data: sites[key]
-    //       };
-    //     } else {
-    //       keyConfig = {
-    //         height: { val: 0 },
-    //         opacity: { val: 0 },
-    //         rotate: { val: 0 },
-    //         z: { val: -100 },
-    //         data: sites[key]
-    //       };
-    //     }
-    //
-    //     configs[key] = keyConfig;
-    //   });
 
     Object
       .keys(sites)
       .forEach(key => {
-        let keyConfig;
+        let keyConfig = {
+          height: { val: 0, config: springConfig },
+          opacity: { val: 0, config: springConfig },
+          z: { val: -100, config: springConfig },
+          data: sites[key]
+        };
 
         if (sitesListVisible && selectedKey !== key && sites[key].visible) {
-          keyConfig = {
-            height: { val: 67 },
-            opacity: { val: 1 },
-            rotate: { val: 0 },
-            z: { val: 0 },
-            data: sites[key]
-          };
-        } else {
-          keyConfig = {
-            height: { val: 0 },
-            opacity: { val: 0 },
-            rotate: { val: 0 },
-            z: { val: -100 },
-            data: sites[key]
-          };
+          keyConfig.height.val = 67;
+          keyConfig.opacity.val = 1;
+          keyConfig.z.val = 0;
         }
 
         configs[key] = keyConfig;
@@ -317,22 +296,24 @@ const SidebarDemo = React.createClass({
   },
 
   sitesWillEnter(key) {
+    const { springConfig } = this.state;
+
     return {
-      height: { val: 67 },
+      height: { val: 67, config: springConfig },
       opacity: { val: 1 },
-      rotate: { val: 0 },
-      z: { val: 0 },
+      z: { val: 0, config: springConfig },
       data: this.state.sites[key]
     };
   },
 
   sitesWillLeave(key, valueThatJustLeft) {
+    const { springConfig } = this.state;
+
     return {
-      height: { val: 0 },
+      height: { val: 0, config: springConfig },
       opacity: { val: 0 },
-      rotate: { val: 90 },
-      z: { val: -100 },
-      data: valueThatJustLeft.data,
+      z: { val: -100, config: springConfig },
+      data: valueThatJustLeft.data
     };
   },
 
@@ -420,7 +401,14 @@ const SidebarDemo = React.createClass({
           filteredSiteKeys.push(key);
         });
 
-      if (filteredSiteKeys.length === 1) {
+      if (searchValue === 'quicksilver' || searchValue === 'flash') {
+        this.setState({
+          springConfig: (searchValue === 'quicksilver') ? springConfigs.slow : springConfigs.default,
+          sites: this._genSelectedSiteList(),
+          sitesListVisible: true,
+          searchValue: ''
+        });
+      } else if (filteredSiteKeys.length === 1) {
         this._handleSiteClick(filteredSiteKeys[0])();
       } else if (filteredSiteKeys.length === 0) {
         this._handleSwitchClick();
