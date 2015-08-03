@@ -1,12 +1,15 @@
 {
-  "name": "calypso-site-selection",
+  "name": "site-selection-demo",
   "version": "1.0.0",
-  "description": "",
+  "description": "A conceptual demo used to showcase a site selection UI flow utilizing React Motion for the animation.",
   "private": true,
   "src": "src",
   "dist": "dist",
-  "author": "",
-  "license": "ISC",
+  "author": {
+    "name": "Adam Becker",
+    "email": "adambbecker@gmail.com",
+    "url": "https://github.com/adambbecker"
+  },
   "dependencies": {
     "abb-reset-css": "git://github.com/adambbecker/abb-reset-css.git",
     "express": "^4.13.1",

@@ -21,8 +21,6 @@ if(typeof window !== 'undefined') {
 
   var ga = window.ga;
 
-  // ga('create', GA_TRACKING_CODE, 'auto');
-
   module.exports = function() {
     return window.ga.apply(window.ga, arguments);
   };

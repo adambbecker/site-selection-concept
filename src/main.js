@@ -15,7 +15,7 @@ import DemoArea from './components/demo-area.jsx';
 import Sidebar from './components/sidebar/index.jsx';
 
 // ---- Internal Variables ----
-const { GA_TRACKING_ID, ADAM_UUID } = process.env;
+const { GA_TRACKING_ID, NO_TRACK_UUID } = process.env;
 
 // ---- Styles ----
 import 'abb-reset-css';
@@ -37,7 +37,7 @@ class Main extends React.Component {
 
     localStorage.visitorUUID = visitorUUID;
 
-    if (typeof GA_TRACKING_ID !== 'undefined' && visitorUUID !== ADAM_UUID) {
+    if (typeof GA_TRACKING_ID !== 'undefined' && visitorUUID !== NO_TRACK_UUID) {
       ga('create', GA_TRACKING_ID, { 'userId': visitorUUID });
       ga('send', 'pageview');
     }
