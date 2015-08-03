@@ -35,8 +35,8 @@ module.exports = function (grunt) {
 						'process.env': {
 							// This has effect on the react lib size
 							'NODE_ENV': JSON.stringify('production'),
-              'GA_TRACKING_ID': JSON.stringify('UA-65859875-1'),
-              'ADAM_UUID': JSON.stringify('8c2381ca-8a7d-4677-a731-6ad0509469aa')
+              'GA_TRACKING_ID': JSON.stringify(process.env.GA_TRACKING_ID),
+              'ADAM_UUID': JSON.stringify(process.env.ADAM_UUID)
 						}
 					}),
           new webpack.optimize.DedupePlugin(),
