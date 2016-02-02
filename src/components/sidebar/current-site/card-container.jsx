@@ -5,7 +5,7 @@
 // =====================================================
 
 // ---- External Dependencies ----
-require('babel-core/polyfill'); // needed for Object.assign
+//require('babel-core/polyfill'); // needed for Object.assign
 import React from 'react';
 import { TransitionSpring } from 'react-motion';
 
