@@ -11,7 +11,7 @@
     "url": "https://github.com/adambbecker"
   },
   "scripts": {
-    "start": "webpack-dev-server --config ./webpack.config.js --entry ./src/main.js --inline --hot --port 3000 --content-base ./src --output-filename=main.js"
+    "start": "webpack-dev-server --config ./webpack.config.js --entry ./src/main.js --inline --hot --port 3000 --content-base ./src --output-filename=dist/main.js"
   },
   "dependencies": {
     "abb-reset-css": "git://github.com/adambbecker/abb-reset-css.git",
