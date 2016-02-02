@@ -5,7 +5,6 @@
 // =========================================
 
 // ---- External Dependencies ----
-require('babel-core/polyfill'); // needed for Object.assign
 import React from 'react';
 
 // ---- Internal Dependencies ----
