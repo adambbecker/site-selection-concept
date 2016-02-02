@@ -5,7 +5,6 @@
 // =========================================
 
 // ---- External Dependencies ----
-//require('babel-core/polyfill'); // needed for Object.assign
 import React from 'react';
 import { Spring, TransitionSpring } from 'react-motion';
 import ga from '../../ga.js';
