@@ -1,14 +1,6 @@
-// ===================================================
-// Site Card
-// ----
-// Displays site icon, title, and URL
-// ===================================================
-
-// ---- External Dependencies ----
 import React from 'react';
 import Radium from 'radium';
 
-// ---- Styles ----
 const styles = {
   base: {
     display: 'flex',
@@ -41,7 +33,6 @@ const styles = {
   }
 };
 
-// ---- React Class ----
 class SiteCard extends React.Component {
 
   render() {
@@ -61,10 +52,6 @@ class SiteCard extends React.Component {
     )
   }
 
-  // Header
-  // ------------
+};
 
-}
-
-// ==== Module Export ====
 export default Radium(SiteCard);

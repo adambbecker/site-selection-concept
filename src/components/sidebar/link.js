@@ -1,18 +1,7 @@
-// =========================================
-// Sidebar - Link
-// ----
-// Section links
-// =========================================
-
-// ---- External Dependencies ----
 import React from 'react';
 import Radium from 'radium';
 
-// ---- Internal Dependencies ----
-
-
-// ---- Styles ----
-import { projectStyles } from '../../project-vars.js';
+import { projectStyles } from '../../project-vars';
 const styles = {
   base: {
     display: 'flex',
@@ -59,7 +48,6 @@ const styles = {
   }
 };
 
-// ---- React Class ----
 class SidebarLink extends React.Component {
 
   render() {
@@ -94,10 +82,6 @@ class SidebarLink extends React.Component {
     )
   }
 
-  // Header
-  // ------------
-
 }
 
-// ==== Module Export ====
 export default Radium(SidebarLink);

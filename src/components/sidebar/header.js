@@ -1,13 +1,5 @@
-// =========================================
-// Sidebar - Header
-// ----
-// Section header for grouped links
-// =========================================
-
-// ---- External Dependencies ----
 import React from 'react';
 
-// ---- Styles ----
 const styles = {
   base: {
     display: 'flex',
@@ -29,7 +21,6 @@ const styles = {
   }
 };
 
-// ---- React Class ----
 class SidebarHeader extends React.Component {
 
   render() {
@@ -41,10 +32,6 @@ class SidebarHeader extends React.Component {
     )
   }
 
-  // Header
-  // ------------
+};
 
-}
-
-// ==== Module Export ====
 export default SidebarHeader;

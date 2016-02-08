@@ -1,16 +1,5 @@
-// =========================================
-// SiteListSearch
-// ----
-// Search functionality in the sites list
-// =========================================
-
-// ---- External Dependencies ----
-require('babel-core/polyfill'); // needed for Object.assign
 import React from 'react';
 
-// ---- Internal Dependencies ----
-
-// ---- Styles ----
 const styles = {
   base: {
     position: 'relative'
@@ -33,8 +22,7 @@ const styles = {
   }
 };
 
-// ---- React Class ----
-class SiteListSearch extends React.Component {
+export default class SiteListSearch extends React.Component {
 
   render() {
     return (
@@ -59,10 +47,4 @@ class SiteListSearch extends React.Component {
     )
   }
 
-  // Header
-  // ------------
-
-}
-
-// ==== Module Export ====
-export default SiteListSearch;
+};
