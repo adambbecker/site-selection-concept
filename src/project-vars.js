@@ -1,10 +1,3 @@
-// ===================================================
-// Project-Vars
-// ----
-// Project level variables
-// ===================================================
-
-// ---- Styles ----
 export const projectStyles = {
   timings: {
     color: '0.15s'

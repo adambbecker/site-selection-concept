@@ -1,19 +1,10 @@
-// ===================================================
-// Current Site Container
-// ----
-// Top bar that represents the currently selected site
-// ===================================================
-
-// ---- External Dependencies ----
 import React from 'react';
 import Radium from 'radium';
 
-// ---- Internal Dependencies ----
-import CurrentCardContainer from './card-container.jsx';
-import SwitchSite from './switch-site.jsx';
+import CurrentCardContainer from './card-container';
+import SwitchSite from './switch-site';
 
-// ---- Styles ----
-import { projectStyles } from '../../../project-vars.js';
+import { projectStyles } from '../../../project-vars';
 const styles = {
   borderWidth: 1,
   borderStyle: 'solid',
@@ -28,7 +19,6 @@ const styles = {
   }
 };
 
-// ---- React Class ----
 class CurrentSite extends React.Component {
 
   render() {
@@ -48,10 +38,6 @@ class CurrentSite extends React.Component {
     )
   }
 
-  // Header
-  // ------------
+};
 
-}
-
-// ==== Module Export ====
 export default Radium(CurrentSite);

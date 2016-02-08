@@ -1,23 +1,14 @@
-// =========================================
-// Main
-// ----
-// Entry point for app
-// =========================================
-
-// ---- External Dependencies ----
 import React from 'react';
+import { render } from 'react-dom';
 import uuid from 'node-uuid';
 import ga from './ga.js';
 
-// ---- Internal Dependencies ----
-import MasterBar from './components/master-bar.jsx';
-import DemoArea from './components/demo-area.jsx';
-import Sidebar from './components/sidebar/index.jsx';
+import MasterBar from './components/master-bar';
+import DemoArea from './components/demo-area';
+import Sidebar from './components/sidebar';
 
-// ---- Internal Variables ----
 const { GA_TRACKING_ID, NO_TRACK_UUID } = process.env;
 
-// ---- Styles ----
 import 'abb-reset-css';
 const styles = {
   display: 'flex',
@@ -56,4 +47,4 @@ class Main extends React.Component {
 
 }
 
-React.render(<Main />, document.getElementById('app'));
+render(<Main />, document.getElementById('app'));

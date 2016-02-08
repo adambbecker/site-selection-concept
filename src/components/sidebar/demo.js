@@ -1,24 +1,15 @@
-// =========================================
-// Sites-List
-// ----
-// Container for list of sites
-// =========================================
-
-// ---- External Dependencies ----
-require('babel-core/polyfill'); // needed for Object.assign
 import React from 'react';
-import { Spring, TransitionSpring } from 'react-motion';
-import ga from '../../ga.js';
+import ReactDOM from 'react-dom';
+import { Motion, TransitionMotion, spring } from 'react-motion';
+import ga from '../../ga';
 
-// ---- Internal Dependencies ----
-import CurrentSite from './current-site/index.jsx';
-import SiteCard from './site-card.jsx';
-import SiteListSearch from './site-list-search.jsx';
-import SidebarHeader from './header.jsx';
-import SidebarLinkGroup from './link-group.jsx';
-import SidebarLink from './link.jsx';
+import CurrentSite from './current-site/index';
+import SiteCard from './site-card';
+import SiteListSearch from './site-list-search';
+import SidebarHeader from './header';
+import SidebarLinkGroup from './link-group';
+import SidebarLink from './link';
 
-// ---- Internal Variables ----
 const { GA_TRACKING_ID, NO_TRACK_UUID } = process.env;
 const iconPaths = {
   posts: 'M16 19H3v-2h13v2zm5-10H3v2h18V9zM3 5v2h11V5H3zm14 0v2h4V5h-4zm-6 8v2h10v-2H11zm-8 0v2h5v-2H3z',
@@ -32,11 +23,10 @@ const iconPaths = {
   stats: 'M21 21H3v-2h18v2zM8 10H4v7h4v-7zm6-7h-4v14h4V3zm6 3h-4v11h4V6z'
 };
 const springConfigs = {
-  default: [170, 26],
-  slow: [80, 62]
+  default: { sitffness: 170, damping: 26 },
+  slow: { sitffness: 80, damping: 62 }
 };
 
-// ---- Styles ----
 const styles = {
   base: {
     position: 'relative'
@@ -61,7 +51,6 @@ const styles = {
   }
 };
 
-// ---- React Class ----
 const SidebarDemo = React.createClass({
 
   mixins: [
@@ -141,15 +130,10 @@ const SidebarDemo = React.createClass({
           onClick={ this._handleSwitchClick }
           springConfig={ springConfig } />
         <div style={ styles.sites.base }>
-          <Spring
-            defaultValue={ {
-              height: { val: 0, config: springConfig },
-              z: { val: -100, config: springConfig }
-            } }
-            endValue={ this.searchGetEndValue() }>
-            { interpolated =>
+          <Motion style={ this.searchGetStyles() }>
+            { ( { height, z } ) =>
               <div key="searchCon" style={ {
-                height: interpolated.height.val,
+                height: height,
                 backgroundColor: '#fff',
                 border: 'solid 1px rgba(200, 215, 225, 0.5)',
                 borderBottom: 'none',
@@ -158,34 +142,33 @@ const SidebarDemo = React.createClass({
                 <SiteListSearch
                   ref={ component => {
                     if (this.state.sitesListVisible && component) {
-                      React.findDOMNode(component.refs.input).focus();
+                      ReactDOM.findDOMNode(component.refs.input).focus();
                     }
                   } }
                   value={ this.state.searchValue }
                   onChange={ this._handleSearchChange }
                   onKeyUp={ this._handleSearchKeyUp }
                   style={ {
-                    transform: `translate3d(0, 0, ${ interpolated.z.val }px)`,
+                    transform: `translate3d(0, 0, ${ z }px)`,
                     transformOrigin: 'top',
                   } } />
               </div>
             }
-          </Spring>
-          <TransitionSpring
-            endValue={ this.sitesGetEndValue() }
+          </Motion>
+          <TransitionMotion
+            defaultStyles={ this.sitesGetDefaultStyles() }
+            styles={ this.sitesGetStyles() }
             willLeave={ this.sitesWillLeave }
             willEnter={ this.sitesWillEnter }>
-            { currentValue =>
+            { configs =>
               <ul style={ styles.sites.list }>
-                { Object.keys(currentValue).map(key => {
-                  const config = currentValue[key];
-                  const { data, height, opacity, rotate, z } = config;
+                { configs.map( ( { key, style: { height, opacity, z }, data } ) => {
                   const { sites: { card: { borderTop } } } = styles;
                   const style = {
-                    transform: `translate3d(0, 0, ${ z.val }px)`,
+                    transform: `translate3d(0, 0, ${ z }px)`,
                     transformOrigin: 'top',
-                    height: height.val,
-                    opacity: opacity.val,
+                    height: height,
+                    opacity: opacity,
                     overflow: 'hidden',
                     cursor: 'pointer'
                   };
@@ -198,18 +181,11 @@ const SidebarDemo = React.createClass({
                 }) }
               </ul>
             }
-          </TransitionSpring>
+          </TransitionMotion>
         </div>
-        <Spring
-          defaultValue={ { val: 0 } }
-          endValue={ {
-            val: this.state.sitesListVisible ? 0 : 1,
-            config: springConfig
-          } }>
-          { interpolated =>
-            <div style={ {
-              opacity: interpolated.val
-            } }>
+        <Motion style={ this.navGetStyles() }>
+          { ( { opacity } ) =>
+            <div style={ { opacity: opacity } }>
               { (selectedKey === 'all') ?
                 <div>
                   <SidebarLinkGroup>
@@ -247,80 +223,111 @@ const SidebarDemo = React.createClass({
               }
             </div>
           }
-        </Spring>
+        </Motion>
       </div>
     );
   },
 
-  // Animation - search
-  // ---------------------
-  searchGetEndValue(prevValue) {
+  searchGetStyles(prevValue) {
     const { sitesListVisible, springConfig } = this.state;
-    let endValue = {
-      height: { val: 0, config: springConfig },
-      z: { val: -100, config: springConfig }
+    let style = {
+      height: spring( 0, springConfig ),
+      z: spring( -100, springConfig )
     };
 
     if (sitesListVisible) {
-      endValue.height.val = 43;
-      endValue.z.val = 0;
+      style = {
+        height: spring( 43, springConfig ),
+        z: spring( 0, springConfig )
+      };
     }
 
-    return endValue;
+    return style;
   },
 
-  // Animation - sites list
-  // ----------------------
-  sitesGetEndValue() {
+  sitesGetDefaultStyles() {
     const { sites, sitesListVisible, selectedKey, springConfig } = this.state;
-    let configs = {};
+    let styles = [];
 
     Object
       .keys(sites)
       .forEach(key => {
-        let keyConfig = {
-          height: { val: 0, config: springConfig },
-          opacity: { val: 0, config: springConfig },
-          z: { val: -100, config: springConfig },
+        styles.push( {
+          key: key,
+          style: {
+            height: 0,
+            opacity: 0,
+            z: -100
+          },
+          data: sites[key]
+        } );
+      });
+
+    return styles;
+  },
+
+  sitesGetStyles() {
+    const { sites, sitesListVisible, selectedKey, springConfig } = this.state;
+    let styles = [];
+
+    Object
+      .keys(sites)
+      .forEach(key => {
+        let keyStyle = {
+          key: key,
+          style: {
+            height: spring( 0, springConfig ),
+            opacity: spring( 0, springConfig ),
+            z: spring( -100, springConfig )
+          },
           data: sites[key]
         };
 
         if (sitesListVisible && selectedKey !== key && sites[key].visible) {
-          keyConfig.height.val = 67;
-          keyConfig.opacity.val = 1;
-          keyConfig.z.val = 0;
+          keyStyle.style.height = spring( 67, springConfig );
+          keyStyle.style.opacity = spring( 1, springConfig );
+          keyStyle.style.z = spring( 0, springConfig );
         }
 
-        configs[key] = keyConfig;
+        styles.push( keyStyle );
       });
 
-    return configs;
+    return styles;
   },
 
-  sitesWillEnter(key) {
-    const { springConfig } = this.state;
-
+  sitesWillEnter() {
     return {
-      height: { val: 67, config: springConfig },
-      opacity: { val: 1, config: springConfig },
-      z: { val: 0, config: springConfig },
-      data: this.state.sites[key]
+      height: 67,
+      opacity: 1,
+      z: 1
     };
   },
 
-  sitesWillLeave(key, valueThatJustLeft) {
+  sitesWillLeave() {
     const { springConfig } = this.state;
 
     return {
-      height: { val: 0, config: springConfig },
-      opacity: { val: 0, config: springConfig },
-      z: { val: -100, config: springConfig },
-      data: valueThatJustLeft.data
+      height: spring( 0, springConfig ),
+      opacity: spring( 0, springConfig ),
+      z: spring( -100, springConfig )
     };
   },
 
-  // Generators
-  // ------------
+  navGetStyles() {
+    const { sitesListVisible, springConfig } = this.state;
+    let style = {
+      opacity: spring( 1, springConfig )
+    };
+
+    if (sitesListVisible) {
+      style = {
+        opacity: spring( 0, springConfig )
+      };
+    }
+
+    return style;
+  },
+
   _genSelectedSiteList() {
     // generates full site list based on current `selectedKey`
     // only selected site not visible
@@ -342,8 +349,6 @@ const SidebarDemo = React.createClass({
     return filteredSites;
   },
 
-  // Handlers
-  // ------------
   handleClickOutside: function(evt) {
     const { sitesListVisible } = this.state;
 
@@ -493,8 +498,6 @@ const SidebarDemo = React.createClass({
     };
   },
 
-  // Analytics
-  // ------------
   _recordAnalyticsEvent(data) {
     const { visitorUUID } = localStorage;
     let eventData = Object.assign({ hitType: 'event' }, data);
@@ -506,5 +509,4 @@ const SidebarDemo = React.createClass({
 
 });
 
-// ==== Module Export ====
 export default SidebarDemo;

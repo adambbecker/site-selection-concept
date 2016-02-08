@@ -1,15 +1,7 @@
-// ===================================================
-// Switch Site
-// ----
-// Button that initiates the site switch
-// ===================================================
-
-// ---- External Dependencies ----
 import React from 'react';
 import Radium from 'radium';
 
-// ---- Styles ----
-import { projectStyles } from '../../../project-vars.js';
+import { projectStyles } from '../../../project-vars';
 const styles = {
   base: {
     display: 'flex',
@@ -85,7 +77,6 @@ const styles = {
   }
 };
 
-// ---- React Class ----
 class SiteSwitcher extends React.Component {
 
   render() {
@@ -119,10 +110,6 @@ class SiteSwitcher extends React.Component {
     )
   }
 
-  // Header
-  // ------------
-
 }
 
-// ==== Module Export ====
 export default Radium(SiteSwitcher);
